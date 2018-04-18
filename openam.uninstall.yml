@@ -1,0 +1,4 @@
+- hosts: openam
+  roles:
+    - role: openam
+      uninstall: true

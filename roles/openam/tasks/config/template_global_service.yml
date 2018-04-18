@@ -1,0 +1,14 @@
+- name: "Copy {{name}} property file"
+  template:
+    src: "{{name}}_{{type}}.properties"
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: "Update {{name}} of type {{type}}"
+  command: '{{ssoadm}} set-attr-defs
+    --adminid amadmin --password-file /tmp/pwd.txt
+    -s {{name}}
+    -t {{type}}
+    -D {{openam_tools}}/admin/{{name}}_{{type}}.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"

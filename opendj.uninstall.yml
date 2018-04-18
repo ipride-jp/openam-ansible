@@ -1,0 +1,4 @@
+- hosts: opendj
+  roles:
+    - role: opendj
+      uninstall: true

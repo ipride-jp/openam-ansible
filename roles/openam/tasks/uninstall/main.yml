@@ -1,0 +1,27 @@
+---
+# tasks file for openam.uninstall
+
+- name: Stop tomcat
+  service:
+    name: tomcat
+    state: stopped
+
+- name: Remove webapps folder
+  file:
+    path: "{{tomcat_webapps}}/{{openam_service_name}}"
+    state: absent
+
+- name: Remove openam service folder
+  file:
+    path: "{{tomcat_home}}/{{openam_service_name}}"
+    state: absent
+
+- name: Remove war file
+  file:
+    path: "{{tomcat_webapps}}/{{openam_service_name}}.war"
+    state: absent
+
+- name: Remove openam tools
+  file:
+    path: "{{openam_tools}}"
+    state: absent

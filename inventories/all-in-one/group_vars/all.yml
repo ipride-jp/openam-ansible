@@ -1,0 +1,3 @@
+base_dn: dc=sample,dc=co,dc=jp
+realm: test
+realm_dn: dc={{realm}},{{base_dn}}

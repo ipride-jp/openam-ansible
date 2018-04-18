@@ -1,0 +1,31 @@
+- name: "Get {{name}} auth instance"
+  command: '{{ssoadm}} get-auth-instance {{ssoadm_common_options}}
+    -m {{name}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  ignore_errors: yes
+  register: result
+
+- debug: msg="{{result}}"
+
+- name: "Create {{name}} auth instance if it doesn't exist"
+  command: '{{ssoadm}} create-auth-instance {{ssoadm_common_options}}
+    -m {{name}}
+    -t {{type}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  ignore_errors: yes
+  when: result.rc != 0
+
+- name: "Copy {{name}} auth instance property file"
+  template:
+    src: "{{name}}.properties"
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: Update {{name}} auth instance properties
+  command: '{{ssoadm}} update-auth-instance {{ssoadm_common_options}}
+    -m {{name}}
+    -D {{openam_tools}}/admin/{{name}}.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"

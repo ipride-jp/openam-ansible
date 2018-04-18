@@ -1,0 +1,2 @@
+- include: opendj.single.install.yml
+- include: openam.single.install.yml

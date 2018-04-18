@@ -1,0 +1,42 @@
+# ssoadm
+- name: Check if ssoadm is installed
+  stat: path={{openam_tools}}/admin
+  register: f
+
+- name: Create ssoadm install directory
+  file:
+    path={{openam_tools}}/admin
+    state=directory
+    mode=777
+  when: not f.stat.exists
+
+- name: Download ssoadmin
+  get_url:
+    url: '{{openam_ssoadm_download_url}}'
+    dest: '{{openam_tools}}/SSOAdminTools-13.0.0.zip'
+    validate_certs: no
+  when: not f.stat.exists
+
+- name: Unarchive ssoadmin
+  unarchive:
+    src: '{{openam_tools}}/SSOAdminTools-13.0.0.zip'
+    dest: '{{openam_tools}}/admin'
+    remote_src: True
+  when: not f.stat.exists
+
+- name: Setup ssoadmin
+  command: './setup \
+    --acceptLicense \
+    --path /usr/share/tomcat/{{openam_service_name}} \
+    --log {{openam_tools}}/admin/log arg1'
+  args:
+    chdir: "{{openam_tools}}/admin"
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  when: not f.stat.exists
+
+- name: Copy pwd file
+  template:
+    src: pwd.txt
+    dest: /tmp/
+    mode: 0400

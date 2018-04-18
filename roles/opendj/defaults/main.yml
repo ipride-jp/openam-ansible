@@ -1,0 +1,36 @@
+
+# Default Variables
+# Override these to suit your environment
+
+install_root: /opt
+download_dir: /tmp
+
+opendj_zip: "OpenDJ-3.0.0.zip"
+opendj_url: "https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/{{opendj_zip}}"
+
+# Directory Manager password
+opendj_password: password
+
+opendj_ldap_port: 389
+opendj_ldaps_port: 636
+opendj_admin_port: 4444
+opendj_jmx_port: 1689
+
+dsconfig: "{{install_root}}/opendj/bin/dsconfig"
+
+dsconfig_common_options: '--port {{opendj_admin_port}}
+  --hostname localhost
+  --bindDN "cn=Directory Manager"
+  --bindPassword {{opendj_password}}
+  --trustAll
+  --no-prompt
+  --noPropertiesFile'
+
+ldapmodify_common_options: '--port {{opendj_ldap_port}}
+  --hostname localhost
+  --bindDN "cn=Directory Manager"
+  --bindPassword {{opendj_password}}
+  --trustAll
+  --noPropertiesFile'
+
+uninstall: false

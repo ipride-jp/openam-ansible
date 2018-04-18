@@ -1,0 +1,75 @@
+# create new domain for realm
+- name: Copy domain entry file
+  template: src=domain_entry.ldif dest={{install_root}}/opendj/
+
+- name: Add domain
+  command: '/opt/opendj/bin/ldapmodify {{ldapmodify_common_options}}
+    --defaultAdd
+    -f /opt/opendj/domain_entry.ldif'
+  ignore_errors: yes
+
+- name: Copy custom attributes
+  template: src=99-custom.ldif dest={{install_root}}/opendj/config/schema/99-custom.ldif
+
+- name: Stop opendj
+  command: '{{install_root}}/opendj/bin/stop-ds'
+  ignore_errors: yes
+
+- name: Start opendj
+  command: '{{install_root}}/opendj/bin/start-ds'
+  ignore_errors: yes
+
+- name: Set password length of validator
+  command: '{{dsconfig}} set-password-validator-prop {{dsconfig_common_options}}
+      --validator-name "Length-Based Password Validator"
+      --set max-password-length:64
+      --set min-password-length:8'
+
+- name: Create password Custom Character Set validator
+  command: '{{dsconfig}} create-password-validator {{dsconfig_common_options}}
+      --validator-name "Custom Character Set Password Validator"
+      --set allow-unclassified-characters:false
+      --set enabled:true
+      --set character-set:0:abcdefghijklmnopqrstuvwxyz
+      --set character-set:0:ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      --set character-set:0:{{password_custom_char_set}}
+      --set character-set:0:0123456789
+      --type character-set'
+  ignore_errors: yes
+
+- name: Set password validator of default password policy
+  command: '{{dsconfig}} set-password-policy-prop {{dsconfig_common_options}}
+      --policy-name "Default Password Policy"
+      --set password-validator:"Length-Based Password Validator"
+      --set password-validator:"Custom Character Set Password Validator"'
+
+- name: Set properties of default password policy
+  command: '{{dsconfig}} set-password-policy-prop {{dsconfig_common_options}}
+      --policy-name "Default Password Policy"
+      --set {{item.name}}:{{item.value}}'
+  with_items: "{{password_policy_properties}}"
+
+- name: Enable entry uuid
+  command: '{{dsconfig}} set-plugin-prop {{dsconfig_common_options}}
+      --plugin-name "Entry UUID"
+      --set enabled:true'
+- name: Remove log rotation for File-Based Access Logger
+  command: '{{dsconfig}} set-log-publisher-prop {{dsconfig_common_options}}
+      --publisher-name "File-Based Access Logger"
+      --remove rotation-policy:"24 Hours Time Limit Rotation Policy"
+      --remove rotation-policy:"Size Limit Rotation Policy"'
+  ignore_errors: yes
+
+- name: Remove log rotation for File-Based Error Logger
+  command: '{{dsconfig}} set-log-publisher-prop {{dsconfig_common_options}}
+      --publisher-name "File-Based Error Logger"
+      --remove rotation-policy:"7 Days Time Limit Rotation Policy"
+      --remove rotation-policy:"Size Limit Rotation Policy"'
+  ignore_errors: yes
+
+- name: Remove log rotation for Replication Repair Logger
+  command: '{{dsconfig}} set-log-publisher-prop {{dsconfig_common_options}}
+      --publisher-name "Replication Repair Logger"
+      --remove rotation-policy:"7 Days Time Limit Rotation Policy"
+      --remove rotation-policy:"Size Limit Rotation Policy"'
+  ignore_errors: yes

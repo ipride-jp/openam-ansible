@@ -1,0 +1,2 @@
+- include: opendj.uninstall.yml
+- include: openam.uninstall.yml

@@ -1,0 +1,25 @@
+openam_download_url: https://github.com/OpenRock/OpenAM/releases/download/13.0.0/OpenAM-13.0.0.war
+openam_service_name: openam
+download_folder: /tmp
+openam_sso_zip: SSOConfiguratorTools-13.0.0.zip
+openam_sso_download_url: https://github.com/OpenRock/OpenAM/releases/download/13.0.0/{{openam_sso_zip}}
+
+openam_admin_pwd: password
+openam_amldapuserpasswd: passwordagent
+openam_ds_dirmgrpasswd: password
+
+openam_tools: /opt/openam-tools
+
+tomcat_home: /usr/share/tomcat
+tomcat_webapps: "{{tomcat_home}}/webapps"
+
+uninstall: false
+
+java_home: /usr/lib/jvm/java-1.8.0
+
+openam_ssoadm_download_url: https://github.com/OpenRock/OpenAM/releases/download/13.0.0/SSOAdminTools-13.0.0.zip
+ssoadm: "{{openam_tools}}/admin/{{openam_service_name}}/bin/ssoadm"
+ssoadm_common_options: "--adminid amadmin --password-file /tmp/pwd.txt --realm /{{realm}}"
+
+default_chain_entries: []
+yahoo_chain_entries: []

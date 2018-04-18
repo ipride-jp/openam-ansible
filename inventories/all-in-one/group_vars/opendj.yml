@@ -1,0 +1,25 @@
+opendj_password: password
+
+password_policy_properties:
+  - name: default-password-storage-scheme
+    value: '"Salted SHA-256"'
+  - name: max-password-age
+    value: 10w
+  - name: allow-expired-password-changes
+    value: true
+  - name: grace-login-count
+    value: 0
+  - name: password-history-count
+    value: 1
+  - name: force-change-on-reset
+    value: true
+  - name: expire-passwords-without-warning
+    value: true
+  - name: password-expiration-warning-interval
+    value: 0s
+  - name: password-validator
+    value: '"Length-Based Password Validator"'
+  - name: password-validator
+    value: '"Custom Character Set Password Validator"'
+
+password_custom_char_set: \!\"#\$%\&\'\(\)*+,-./\:\;\\\<\=\>\?@\[\]^_\`{\|}\~

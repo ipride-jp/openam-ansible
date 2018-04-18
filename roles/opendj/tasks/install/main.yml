@@ -1,0 +1,21 @@
+- name: Create install root
+  file: path={{install_root}} state=directory
+
+- name: Download opendj
+  get_url: url={{opendj_url}} dest={{install_root}}/ validate_certs=no
+
+- name: Unzip opendj
+  unarchive:
+    src: '{{install_root}}/{{opendj_zip}}'
+    dest: '{{install_root}}'
+    remote_src: True
+
+- name: Copy opendj props file
+  template: src=opendj.properties dest=/tmp/opendj.properties
+
+- name: Setup opendj
+  command: 'creates={{install_root}}/opendj/config
+    {{install_root}}/opendj/setup
+    --cli --propertiesFilePath
+    /tmp/opendj.properties
+    --acceptLicense --no-prompt'

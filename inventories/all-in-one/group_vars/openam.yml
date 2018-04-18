@@ -1,0 +1,40 @@
+openam_admin_pwd: password
+openam_amldapuserpasswd: passwordagent
+openam_ds_dirmgrpasswd: password
+
+openam_site_url: http://test.sample-openam.com:8080/{{openam_service_name}}
+openam_cookie_domain: .sample-openam.com
+
+# auth instances
+auth_instances:
+  - name: myLDAP
+    type: LDAP
+  - name: myHOTP
+    type: HOTP
+  - name: myAdaptiveRisk
+    type: Adaptive
+
+# auth_chains
+auth_chains:
+  - name: default
+    entries:
+      - module: myLDAP
+        criteria: REQUISITE
+      - module: myAdaptiveRisk
+        criteria: SUFFICIENT
+      - module: myHOTP
+        criteria: REQUIRED
+
+# datastore
+datastore_ldap_servers:
+  - localhost:389
+
+# myLDAP
+myLDAP_primary_ldap_servers:
+  - localhost:389
+
+myLDAP_secondary_ldap_servers:
+  - localhost:389
+
+auth_service_global_ldap_pool_sizes:
+  - localhost:389:1:20

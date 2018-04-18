@@ -1,0 +1,45 @@
+# auth chain
+- name: "Get {{name}} auth chain configuration"
+  command: '{{ssoadm}} get-auth-cfg-entr {{ssoadm_common_options}}
+    -m {{name}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  ignore_errors: true
+  register: result
+
+- name: "Delete {{name}} auth chain if exists"
+  command: '{{ssoadm}} delete-auth-cfgs {{ssoadm_common_options}}
+    -m {{name}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  when: result.rc == 0
+
+- name: "Create {{name}} auth chain"
+  command: '{{ssoadm}} create-auth-cfg {{ssoadm_common_options}}
+    -m {{name}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+
+- name: "Add entries to {{name}} auth chain"
+  command: '{{ssoadm}} add-auth-cfg-entr {{ssoadm_common_options}}
+    -m {{name}}
+    -o {{entry_item.module}}
+    -c {{entry_item.criteria}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  with_items: "{{entries}}"
+  loop_control:
+    loop_var: entry_item
+
+- name: "Copy {{name}} auth chain property file"
+  template:
+    src: "{{name}}Chain.properties"
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: "Update {{name}} auth chain properties"
+  command: '{{ssoadm}} update-auth-cfg-props {{ssoadm_common_options}}
+    -m {{name}}
+    -D {{openam_tools}}/admin/{{name}}Chain.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"

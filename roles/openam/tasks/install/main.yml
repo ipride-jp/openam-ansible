@@ -1,0 +1,52 @@
+---
+# tasks file for openam
+
+# OpenAM
+- name: Download openam
+  get_url:
+    url: '{{openam_download_url}}'
+    dest: '{{tomcat_webapps}}/{{openam_service_name}}.war'
+    validate_certs: no
+
+- name: Restart tomcat
+  service:
+    name: tomcat
+    state: restarted
+
+- name: Check configurator installed
+  stat:
+    path: '{{openam_tools}}/config/openam-configurator-tool-13.0.0.jar'
+  register: f
+
+# configurator
+- name: Create configurator install directory
+  file:
+    path: '{{openam_tools}}/config'
+    state: directory
+    mode: 777
+  when: f.stat.exists == False
+
+- name: Download configurator
+  get_url:
+    url: '{{openam_sso_download_url}}'
+    dest: '{{openam_tools}}/{{openam_sso_zip}}'
+    validate_certs: no
+  when: f.stat.exists == False
+
+- name: Unarchive configurator
+  unarchive:
+    src: '{{openam_tools}}/{{openam_sso_zip}}'
+    dest: '{{openam_tools}}/config'
+    remote_src: True
+  when: f.stat.exists == False
+
+- name: Copy config.properties
+  template:
+    src: config.properties
+    dest: '{{openam_tools}}/config/config.properties'
+    mode: 644
+
+- name: Set default configuration
+  command: java -jar openam-configurator-tool-13.0.0.jar --file config.properties
+  args:
+    chdir: '{{openam_tools}}/config'

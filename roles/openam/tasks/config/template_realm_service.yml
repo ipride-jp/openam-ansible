@@ -1,0 +1,18 @@
+- name: "Add {{name}}"
+  command: '{{ssoadm}} add-svc-realm {{ssoadm_common_options}} -s {{name}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  ignore_errors: true
+
+- name: "Copy {{name}} property file"
+  template:
+    src: "{{name}}.properties"
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: "Update {{name}}"
+  command: '{{ssoadm}} set-realm-svc-attrs {{ssoadm_common_options}}
+    -s {{name}}
+    -D {{openam_tools}}/admin/{{name}}.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"

@@ -1,0 +1,13 @@
+# realm
+- name: Find realm
+  command: '{{ssoadm}} list-realms {{ssoadm_common_options}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  ignore_errors: true
+  register: result
+
+- name: Create realm
+  command: '{{ssoadm}} create-realm {{ssoadm_common_options}}'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+  when: result.rc != 0

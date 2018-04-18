@@ -1,0 +1,29 @@
+# datastore
+- name: Copy datastore property file
+  template:
+    src: datastore.properties
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: Update datastore
+  command: '{{ssoadm}} update-datastore {{ssoadm_common_options}}
+    --name OpenDJ
+    -D {{openam_tools}}/admin/datastore.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"
+
+# datastore for top realm
+- name: Copy top realm datastore property file
+  template:
+    src: datastore_topRealm.properties
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: Update top realm datastore
+  command: '{{ssoadm}} update-datastore
+    --adminid amadmin --password-file /tmp/pwd.txt
+    --realm /
+    --name OpenDJ
+    -D {{openam_tools}}/admin/datastore_topRealm.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"

@@ -1,0 +1,50 @@
+---
+# tasks file for openam.setting
+
+# ssoadm tool
+- include: ssoadm.yml
+
+# create realm
+- include: realm.yml
+
+# datastore
+- include: datastore.yml
+
+# auth instances & auth chains
+- include: template_auth_instance.yml
+  vars:
+    name: "{{item.name}}"
+    type: "{{item.type}}"
+  with_items: "{{auth_instances}}"
+
+- include: template_auth_chain.yml
+  vars:
+    name: "{{item.name}}"
+    entries: "{{item.entries}}"
+  with_items: "{{auth_chains}}"
+
+# global services
+- include: template_global_service.yml
+  vars:
+    name: "{{item.name}}"
+    type: "{{item.type}}"
+  with_items:
+    - name: MailServer
+      type: organization
+    - name: iPlanetAMAuthService
+      type: global
+    - name: iPlanetAMSessionService
+      type: dynamic
+    - name: sunFAMSAML2Configuration
+      type: global
+
+# default server cfg
+- include: defaultServerCfg.yml
+
+# realm services
+- include: template_realm_service.yml
+  vars:
+    name: "{{item}}"
+  with_items:
+    - selfService
+    - iPlanetAMAuthService

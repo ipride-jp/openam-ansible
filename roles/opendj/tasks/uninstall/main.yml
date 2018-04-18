@@ -1,0 +1,16 @@
+---
+# tasks file for opendj.uninstall
+
+- name: Stop service
+  command: "{{install_root}}/opendj/bin/stop-ds"
+  ignore_errors: true
+
+- name: Remove zip1
+  file:
+    path: '{{install_root}}/{{opendj_zip}}'
+    state: absent
+
+- name: Remove opendj folder
+  file:
+    path: "{{install_root}}/opendj"
+    state: absent

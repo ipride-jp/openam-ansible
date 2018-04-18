@@ -1,0 +1,7 @@
+dn: dc={{realm}},{{base_dn}}
+objectclass: top
+objectclass: domain
+
+dn: ou=people,dc={{realm}},{{base_dn}}
+objectClass: organizationalUnit
+ou: people

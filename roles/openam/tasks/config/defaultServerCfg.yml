@@ -1,0 +1,14 @@
+# default server cfg
+- name: Copy default server cfg property file
+  template:
+    src: defaultServerCfg.properties
+    dest: "{{openam_tools}}/admin/"
+    mode: 644
+
+- name: Update default server cfg property file
+  command: '{{ssoadm}} update-server-cfg
+    --adminid amadmin --password-file /tmp/pwd.txt
+    -s default
+    -D {{openam_tools}}/admin/defaultServerCfg.properties'
+  environment:
+    JAVA_HOME: "{{java_home}}"
