@@ -1,0 +1,7 @@
+- hosts: opendj
+  roles:
+    - role: opendj
+
+- hosts: opendj1
+  roles:
+    - role: opendj-replication

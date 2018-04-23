@@ -2,3 +2,5 @@
   roles:
     - role: openam
       uninstall: true
+      install: false
+      config: false

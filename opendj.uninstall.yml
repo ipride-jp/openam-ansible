@@ -2,3 +2,5 @@
   roles:
     - role: opendj
       uninstall: true
+      install: false
+      config: false

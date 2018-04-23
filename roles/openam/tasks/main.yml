@@ -3,11 +3,11 @@
 
 - include: install/main.yml
   static: no
-  when: not uninstall
+  when: install
 
 - include: config/main.yml
   static: no
-  when: not uninstall
+  when: config
 
 - include: uninstall/main.yml
   static: no

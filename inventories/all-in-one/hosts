@@ -1,8 +1,8 @@
 [opendj1]
-54.238.186.41 # change to your ip address
+54.199.214.92 # change to your ip address
 
 [openam1]
-54.238.186.41 # change to your ip address
+54.199.214.92 # change to your ip address
 
 [openam:children]
 openam1

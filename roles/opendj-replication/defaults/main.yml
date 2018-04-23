@@ -1,0 +1,23 @@
+
+# Default Variables
+# Override these to suit your environment
+
+install_root: /opt
+
+# Directory Manager password
+opendj_password: password
+
+# Second instance default password
+opendj_password2: password
+
+opendj_replication_admin: admin
+opendj_replication_password: password
+
+opendj_admin_port: 4444
+opendj_admin_port2: 4444
+
+opendj_replication_port: 8989
+opendj_replication_port2: 8989
+
+# replication command
+dsreplication: "{{install_root}}/opendj/bin/dsreplication"

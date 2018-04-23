@@ -1,0 +1,46 @@
+openam_admin_pwd: password
+openam_amldapuserpasswd: passwordagent
+openam_ds_dirmgrpasswd: password
+
+openam_site_url: http://ansible.company-in-cloud.com/{{openam_service_name}}
+openam_cookie_domain: .company-in-cloud.com
+
+# auth instances
+auth_instances:
+  - name: myLDAP
+    type: LDAP
+  - name: myHOTP
+    type: HOTP
+  - name: myAdaptiveRisk
+    type: Adaptive
+
+# auth_chains
+auth_chains:
+  - name: default
+    entries:
+      - module: myLDAP
+        criteria: REQUISITE
+      - module: myAdaptiveRisk
+        criteria: SUFFICIENT
+      - module: myHOTP
+        criteria: REQUIRED
+
+# datastore
+datastore_ldap_servers:
+  - "{{opendj_host1}}:389｜01"
+  - "{{opendj_host2}}:389｜02"
+  - "{{opendj_host1}}:389"
+  - "{{opendj_host2}}:389"
+
+# myLDAP
+myLDAP_primary_ldap_servers:
+  - "{{opendj_host1}}|{{opendj_host1}}:389"
+  - "{{opendj_host2}}|{{opendj_host2}}:389"
+
+myLDAP_secondary_ldap_servers:
+  - "{{opendj_host2}}|{{opendj_host1}}:389"
+  - "{{opendj_host1}}|{{opendj_host2}}:389"
+
+auth_service_global_ldap_pool_sizes:
+  - "{{opendj_host1}}:389:1:20"
+  - "{{opendj_host2}}:389:1:20"

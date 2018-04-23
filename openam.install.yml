@@ -1,0 +1,9 @@
+- hosts: openam1
+  roles:
+    - role: openam
+      config: false
+
+- hosts: openam2
+  roles:
+    - role: openam
+      config: false

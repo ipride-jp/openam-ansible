@@ -33,4 +33,6 @@ ldapmodify_common_options: '--port {{opendj_ldap_port}}
   --trustAll
   --noPropertiesFile'
 
+install: true
+config: true
 uninstall: false

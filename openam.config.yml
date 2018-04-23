@@ -1,0 +1,4 @@
+- hosts: openam1
+  roles:
+    - role: openam
+      install: false
